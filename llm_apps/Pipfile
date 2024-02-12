@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+langchain = "*"
+streamlit = "==1.31.0"
+pdfreader = "*"
+pypdf2 = "*"
+llama-index = "*"
+pypdf = "*"
+pytesseract = "*"
+pdf2image = "*"
+streamlit-nested-layout = "*"
+streamlit-pandas = "*"
+streamlit-awesome-table = "*"
+streamlit-sortables = "*"
+streamlit-timeline = "*"
+streamlit-on-hover-tabs = "*"
+st-mui-dialog = "*"
+streamlit-image-comparison = "*"
+hydralit = "*"
+streamlit-option-menu = "*"
+streamlit-card = "*"
+streamlit-text-rating = "*"
+altair = "==4"
+pandas = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

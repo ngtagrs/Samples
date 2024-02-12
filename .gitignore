@@ -1,0 +1,17 @@
+#streamlit
+.streamlit/
+
+#python
+**/__pycache__/**
+
+#general
+.venv/
+
+#udemy-streamlit-llm-apps
+100knocks-preprocess
+sample.db
+.github/
+
+#llm_apps
+data/
+storage/
