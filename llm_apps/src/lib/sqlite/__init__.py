@@ -1,1 +1,0 @@
-DB_FILE = "pdf_document.db"

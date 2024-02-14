@@ -12,7 +12,7 @@
             "console": "integratedTerminal",
             "args": [
                 "run",
-                "src/st_app/home.py",
+                "src/home.py",
                 "--server.port",
                 "6789"
             ]

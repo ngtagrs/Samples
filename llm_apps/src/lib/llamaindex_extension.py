@@ -1,6 +1,6 @@
 
-from llama_index.readers.file.docs_reader import PDFReader
-from llama_index.schema import Document
+from llama_index.readers.file.docs import PDFReader
+from llama_index.core.schema import Document
 from pathlib import Path
 import pytesseract
 from pdf2image import convert_from_path

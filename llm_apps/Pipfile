@@ -26,6 +26,9 @@ streamlit-card = "*"
 streamlit-text-rating = "*"
 altair = "==4"
 pandas = "*"
+streamlit-aggrid = "*"
+llama-index-llms-openai = "*"
+llama-index-agent-openai = "*"
 
 [dev-packages]
 
