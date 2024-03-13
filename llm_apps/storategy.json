@@ -1,0 +1,19 @@
+{
+    "name":"NikkeiDeltaHedge",
+    "TargetTrades":["Future", "Call", "Put"],
+    "Operations":{
+        "10:00:00":{
+            "Conditions":["SQ", "FirstDay"],
+            "Processes":{
+                "Rebalance":{
+
+                },
+                "Hedge":{
+
+                }
+            },
+        "15:00:00":{
+
+        }
+    }}
+}

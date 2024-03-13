@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block additional_header %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <h2 class="h2 mx-2" style="color: #fff;">リスト</h2>
+    <table class="table mx-2">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+<div>
+    <h2 class="h2 mx-2" style="color: #fff;">アップロード</h2>
+</div>
+{% endblock %}

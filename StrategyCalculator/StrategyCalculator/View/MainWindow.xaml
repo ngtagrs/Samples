@@ -1,0 +1,91 @@
+﻿<Window x:Class="StrategyCalculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="取引戦略計算アプリ" Height="450" Width="600">
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Label Content="Strategy Name"/>
+            <TextBox  Width="100"/>
+        </StackPanel>
+
+        <Button Content="Update Tab" Click="UpdateTabButton_Click"/>
+        <TabControl ItemsSource="{Binding TestDic1}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Key}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ListView ItemsSource="{Binding Value}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+        <TabControl ItemsSource="{Binding TestDic2}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Key}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ListView ItemsSource="{Binding Value}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <GroupBox Header="Parameter Definition" Margin="10" Height="200" Width="400">
+                <StackPanel Orientation="Vertical">
+                    <Button Content="追加" Click="AddParameterDefinitionButton_Click" Height="20" Width="100"/>
+                    <StackPanel Name="ParameterPanel" Orientation="Vertical"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Trade" Margin="10" MinHeight="200" MinWidth="400">
+                <StackPanel Orientation="Vertical">
+                    <Button Content="追加" Click="AddTradeButton_Click" Height="20" Width="100"/>
+                    <StackPanel Name="TradePanel" Orientation="Vertical"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        
+        <!--<Label Content="トレードの時間と条件"/>-->
+            <!--<ListBox x:Name="timeTradesListBox" ItemsSource="{Binding TimeTrades}" DisplayMemberPath="Time" SelectedItem="{Binding SelectedTimeTrade}" Margin="0,0,0,10"/>-->
+            <Button Content="追加" Click="AddTimeTradeButton_Click" Width="150"/>
+            <!--<Button Content="削除" Click="RemoveTimeTradeButton_Click"/>-->
+            
+            <StackPanel Name="TimePanel" Orientation="Vertical"/>
+
+            <!-- 各時間の条件を編集するコントロールを追加 -->
+            <!--<Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="条件の種類:"/>
+                <ComboBox x:Name="conditionTypeComboBox" Grid.Column="1">
+                    <ComboBoxItem Content="SQ日"/>
+                    <ComboBoxItem Content="全取引"/>
+                    --><!-- 他の条件も追加 --><!--
+                </ComboBox>
+
+                <Label Grid.Column="2" Content="処理の種類:"/>
+                <ComboBox x:Name="tradeTypeComboBox" Grid.Column="3">
+                    <ComboBoxItem Content="売り"/>
+                    <ComboBoxItem Content="買い"/>
+                    --><!-- 他の処理も追加 --><!--
+                </ComboBox>
+            </Grid>
+
+            <Button Content="計算実行" Click="CalculateButton_Click"/>
+        </StackPanel>-->
+
+        <!-- 結果表示領域 -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <Label Content="計算結果:" FontWeight="Bold"/>
+            <TextBox x:Name="resultTextBox" IsReadOnly="True" Height="150"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

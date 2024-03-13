@@ -15,3 +15,8 @@ sample.db
 #llm_apps
 data/
 storage/
+
+#Strategy
+.vs/
+bin/
+obj/

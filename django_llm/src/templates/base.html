@@ -1,0 +1,58 @@
+{% load static %}
+{% load django_bootstrap5 %}
+
+<html class="h-100">
+    <head>
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        <title>RAG Chat</title>
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        {% block additional_header %}
+        {% endblock %}
+
+    </head>
+    <body class="h-100">
+        <header class="w-100 d-flex justify-content-between align-items-center bg-dark px-3">
+            <h1 class="mx-2 fs-4 fw-bold" style="color: #fff;">RAG Chat</h1>
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <ul class="navbar-nav d-flex flex-row center">
+                <li class="nav-item mx-3 text-muted header-nav-link">
+                    <a class="nav-link active" aria-current="page" href="{% url 'management:index' %}">Home</a>
+                </li>
+                <li class="nav-item mx-3 text-muted header-nav-link">
+                    <a class="nav-link" href="{% url 'search:index' %}">Search</a>
+                </li>
+                <li class="nav-item mx-3 text-muted header-nav-link">
+                    <a class="nav-link" href="{% url 'chat_bot:chat_bot' %}">Chat Bot</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav mr-md-2">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <form action="{% url 'accounts:logout' %}" method="post" name="f_logout">
+                        {% csrf_token %}
+                        <input type="hidden" value="logout">
+                        <a href="javascript:f_logout.submit()" class="logout nav-link" style="color:#fff">ログアウト</a>
+                    </form>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a></li>
+                {% endif %}
+            </ul>
+
+            <!-- <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form> -->
+        </header>
+
+        {% block content %}
+        {% endblock %}
+
+        {% block script %}
+        {% endblock %}
+    </body>
+</html>
