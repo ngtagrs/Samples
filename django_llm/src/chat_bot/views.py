@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -67,15 +67,13 @@ def add_chat(thread:Thread, message:str, user:User, sender:str) -> None:
     chat = Chat(name=sender, message=message, thread=thread, created_by=user)
     chat.save()
 
-@api_view(["POST"])
+@login_required
 def delete_thread(request, thread_id):
-    if request.method == 'POST':
-        if not Thread.objects.filter(id=thread_id).exists(): return
-        Thread.objects.delete(id=thread_id)
-    else:
-        return JsonResponse({'error': 'Invalid HTTP method'})
+    if not Thread.objects.filter(id=thread_id).exists(): return
+    Thread.objects.delete(id=thread_id)
+    return redirect("chat_bot/")
 
-@api_view(["POST"])
+@login_required
 def rename_thread(request, thread_id, name):
     if request.method == 'POST':
         if not Thread.objects.filter(id=thread_id).exists(): return
