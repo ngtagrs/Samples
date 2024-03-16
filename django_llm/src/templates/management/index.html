@@ -4,38 +4,150 @@
 {% load static %}
 
 {% block additional_header %}
+<link rel="stylesheet" href="{% static 'css/management.css' %}">
 {% endblock %}
 
 {% block content %}
-<div>
-    <h2 class="h2 mx-2" style="color: #fff;">リスト</h2>
-    <table class="table mx-2">
-        <thead>
+<div class="container">
+  <div>
+    <h2>リスト</h2>
+    <table class="pdf-table">
+      <thead>
           <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Delete</th>
+              <th>PDF名</th>
+              <th>操作</th>
           </tr>
+      </thead>
+      <tbody>
+          {% for pdf in pdfs %}
+          <tr>
+              <td><a href="{{ pdf.document.url }}" target="_blank">{{ pdf.name }}</a></td>
+              <td><button onclick="deletePdf('{{ pdf.id }}')" class="delete-btn">✕</button></td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex">
+    <div>
+      <h2>グループ</h2>
+      <table class="pdf-table">
+        <thead>
+            <tr>
+                <th>グループ名</th>
+                <th>ファイル数</th>
+            </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+            {% for pdf in pdfs %}
+            <tr>
+                <td><a href="{{ pdf.document.url }}" target="_blank">{{ pdf.name }}</a></td>
+                <td><button onclick="deletePdf('{{ pdf.id }}')" class="delete-btn">✕</button></td>
+            </tr>
+            {% endfor %}
         </tbody>
       </table>
+    </div>
+    <div>
+      <p>AAA</p>
+      <button>Edit</button>
+      <button>Delete</button>
+      <table class="pdf-table">
+        <thead>
+            <tr>
+                <th>グループ名</th>
+                <th>ファイル数</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pdf in pdfs %}
+            <tr>
+                <td><a href="{{ pdf.document.url }}" target="_blank">{{ pdf.name }}</a></td>
+                <td><button onclick="deletePdf('{{ pdf.id }}')" class="delete-btn">✕</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div style="margin-top: 30px;">
+    <h2>アップロード</h2>
+    <form id="uploadForm" class="input-group" action="{% url 'management:upload_pdf' %}" method="post" enctype="multipart/form-data" class="upload-form">
+      {% csrf_token %}
+      <input type="file" id="pdfInput" name="pdf_files" multiple onchange="handleFileSelect()" class="file-input">
+      <ul id="fileList" class="file-list"></ul>
+      <button type="submit" id="uploadBtn" class="upload-btn" style="display: none;">アップロード</button>
+    </form>
+  </div>
+ 
 </div>
-<div>
-    <h2 class="h2 mx-2" style="color: #fff;">アップロード</h2>
-</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  function deletePdf(pdfId) {
+      if (confirm("このPDFを削除しますか？")) {
+          fetch(`/delete/${pdfId}/`, {
+              method: 'POST',
+              headers: {
+                  'X-CSRFToken': '{{ csrf_token }}',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ pdf_id: pdfId })
+          }).then(response => {
+              if (response.ok) {
+                  location.reload();
+              } else {
+                  alert('削除中にエラーが発生しました。');
+              }
+          });
+      }
+  }
+
+  function handleFileSelect() {
+    var fileInput = document.getElementById('pdfInput');
+    var fileList = document.getElementById('fileList');
+    var uploadBtn = document.getElementById('uploadBtn');
+
+    fileList.innerHTML = ''; // リストをリセット
+
+    for (var i = 0; i < fileInput.files.length; i++) {
+        var listItem = document.createElement('li');
+        listItem.textContent = fileInput.files[i].name;
+        fileList.appendChild(listItem);
+        uploadFile(fileInput.files[i], listItem);
+    }
+
+    if (fileInput.files.length > 0) {
+        uploadBtn.style.display = 'inline-block';
+    } else {
+        uploadBtn.style.display = 'none';
+    }
+}
+
+function uploadFile(file, listItem) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '{% url "management:upload_pdf" %}', true);
+    var formData = new FormData();
+    formData.append('pdf_files', file);
+    xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+            var progress = (e.loaded / e.total) * 100;
+            listItem.textContent = file.name + ' - アップロード中... ' + Math.round(progress) + '% 完了';
+        }
+    };
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            listItem.textContent = file.name + ' - アップロード完了';
+        }
+    };
+    xhr.onerror = function() {
+        listItem.textContent = file.name + ' - アップロード中にエラーが発生しました';
+    };
+    xhr.send(formData);
+}
+</script>
 {% endblock %}

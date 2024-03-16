@@ -4,27 +4,52 @@
 {% load static %}
 
 {% block additional_header %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="d-flex flex-row w-100" style="height: calc(100% - 50px)">
-    <nav id="sidebar-nav" class="bg-dark" style="width: 160px;">
+    <nav id="sidebar-nav" class="bg-dark d-flex flex-column" style="width: 300px;">
         <div style="margin: 10px;">
             <form action="{% url 'chat_bot:chat_bot' %}" method="post" name="f_newchat">
                 {% csrf_token %}
-                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff; width: 100%;">New Chat</button>
+                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff;">New Chat</button>
             </form>
         </div>
-        <ul id="sidebar-list" class="navbar-nav flex-column m-0 p-3">
+        <ul id="sidebar-list" class="navbar-nav flex-column m-0 p-3" style="height: calc(100% - 300px);">
             {% for thread in threads %}
             <li id="{{ thread.id }}" class="nav-item mx-3 text-muted side-nav-bar">
-                <div class="d-flex">
-                    <a class="nav-link active" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}">{{ thread.title }}</a>
-                    <button id="thread-delete-button" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 60px;">✕</button>
+                <div id="thread-{{ thread.id }}-link-container" style="display: flex;">
+                    <a id="thread-{{ thread.id }}-link" class="nav-link" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}" style="max-width: 150px; padding: 1px; width:auto;" >{{ thread.title }}</a>
+                    <button onclick="renameThread('{{ thread.id }}')" title="名前変更" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">...</button>
+                    <button onclick="deleteThread('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+                </div>
+                <div id="thread-{{ thread.id }}-input-container" style="display: none;">
+                    <input id="thread-{{ thread.id }}-input" type="text" style="max-width: 150px;">
+                    <button onclick="renameCancel('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px;">✕</button>
+                    <button onclick="renameSave('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px;">✓</button>
                 </div>
             </li>
             {% endfor %}
         </ul>
+
+        <div id="gpt-setting" style="font-size: 10px; margin: 10px;">
+            <h3 style="color: #fff; font-size: 20px;">GPT Setting</h3>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01" style="font-size: 12px;">Model</label>
+                <select class="form-select" id="inputGroupSelect01" value="{{ gpt_setting.model }}" style="font-size: 12px;">
+                    {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- <label style="color: #fff">Temperature</label> -->
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="temperatureInput" style="font-size: 12px;">Temperature</label>
+                <input id="temperatureInput" class="form-control" type="number" min=0 max="2" step=0.01 value="{{ gpt_setting.temperature }}" style="font-size: 12px;">
+                <!-- <input id="temperatureInput" class="form-control" type="range" min="0" max="100" style="font-size: 12px;"> -->
+            </div>
+        </div>
     </nav>
 
     <main class="d-flex flex-column w-100 h-100">
@@ -32,16 +57,21 @@
             {% for chat in chats %}
             <div class="chat-element">
                 <div class="chat-user-part">
-                    <img src="media/icon/{{ chat.name }}.png" width="30" height="30">
-                    <div class="user-name">{{ chat.name }}</div>
+                    {% if chat.sender == "GPT" %}
+                    <img src="{{ MEDIA_URL }}/icon/gpt.png" width="30" height="30">
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}/icon/user.png" width="30" height="30">
+                    {% endif %}
+                    <div class="user-name">{{ chat.sender }}</div>
                 </div>
                 <div class="chat-message" style="white-space: pre-line;">{{ chat.message }}</div>
             </div>
             {% endfor %}
         </div>
         <div id="message-form" class="input-group">
-            <input id="user-message" type="text" class="form-control" placeholder="ここに入力してください" aria-label="ここに入力してください" aria-describedby="button-addon2">
-            <button id="message-send-button" class="btn btn-outline-secondary" type="button" id="button-addon2"><img src="media/icon/gpt.png" width="30" height="30"></button>
+            <textarea id="user-message" style="height: 30px; min-height: 30px; max-height: 200px; width: calc(100% - 50px); line-height: 20px;"></textarea>
+            <!-- <button id="file-upload" class="btn btn-outline-secondary" type="button" style="height: 30px; align-self: flex-end;"></button> -->
+            <button id="message-send-button" class="btn btn-outline-secondary" type="button" style="height: 30px;"><img src="{{ MEDIA_URL }}/icon/gpt.png" width="20px" height="20px"></button>
         </div>
     </main>
 </div>
@@ -52,32 +82,196 @@
 <script>
     let thread_id = JSON.parse('{{ js_data|safe }}').thread_id;
 
+    const gpt_model_setting = document.getElementById("inputGroupSelect01")
+    const gpt_temperature_setting = document.getElementById("temperatureInput")
+
     const sidebarList = document.getElementById("sidebar-list");
     const userMessage = document.getElementById("user-message");
     const chatMessages = document.getElementById("chat-messages");
     document.getElementById("message-send-button").addEventListener("click", async (event) => {
         event.preventDefault();
-        if (userMessage.value == "") return;
-        chatMessages.appendChild(createChatElement(userMessage.value, 'user'));
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        const response = await sendMessage(userMessage.value, thread_id);
-        
-        if (thread_id!=response.thread_id) 
-        {
-            sidebarList.appendChild(createChatThreadElement("New"));
-            thread_id = response.thread_id;
-        }
-
-        chatMessages.appendChild(createChatElement(response.message, 'gpt'));
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        userMessage.value = '';
+        sendMessage();
     });
 
-    document.getElementById("thread-delete-button").addEventListener("click", async (event) => {
-        event.preventDefault();
+    document.getElementById("user-message").addEventListener("keydown", function(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
+    document.getElementById("user-message").addEventListener("input", function() {
+        adjustChatHeight();
+    });
+
+    function adjustChatHeight() {
+        var messageFormHeight = document.getElementById("message-form").clientHeight;
+        var chatMessagesHeight = document.getElementById("chat-messages").clientHeight;
+        var windowHeight = window.innerHeight;
+        var newChatMessagesHeight = windowHeight - messageFormHeight;
+        document.getElementById("chat-messages").style.height = newChatMessagesHeight + "px";
+    }
+
+    async function sendMessage(){
+        if (userMessage.value == "") return;
+
+        const message = userMessage.value;
+        userMessage.value = '';
+        if(thread_id==0) {
+            thread_id = await addNewThread();
+        }
+
+        let userChatElement = createChatElementMessage(message, 'user');
+        chatMessages.appendChild(userChatElement);
+
+        let gptChatElement = createChatElement('GPT');
+        chatMessages.appendChild(gptChatElement);
+
+        const model = gpt_model_setting.value;
+        const temperature = gpt_temperature_setting.value;
+        var fetch_setting = 
+        { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')}, 
+            body : JSON.stringify({ message: message, model:model, temperature:temperature })
+        }
+        const url = `http://127.0.0.1:8000/chat_bot/gpt/${thread_id}/`
+        const response = await fetch(url, fetch_setting)
+        .catch(error => console.error('Error:', error));
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        const userMessageElement = userChatElement.children.item(1);
+        const gptMessageElement = gptChatElement.children.item(1);
+        const read = async () => {
+            const { done, value } = await reader.read();
+            if (done) return reader.releaseLock();
+
+            const chunk = decoder.decode(value, { stream: true });
+            const jsons = chunk
+                .split('data:')
+                .map((data) => {
+                    if (data.trim() === '') return undefined;
+                    if (data.trim() === '[DONE]') return undefined;
+                    return data;
+                })
+                .filter((data) => data);
+
+            if(jsons!="None"){
+                gptMessageElement.innerText += jsons;
+            }
+            return read();
+        };
+        await read();
         
+        addChatHistory(thread_id, userMessageElement.innerText, gptMessageElement.innerText);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+
+    }
+
+    async function addNewThread(){
+        const fetch_setting = 
+        { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json", "X-CSRFToken": '{{ csrf_token }}'},
+        }
+        const response = await fetch("{% url 'chat_bot:add_new_thread' %}", fetch_setting).then(response => response.json()).catch(error => console.error('Error:', error));
+        sidebarList.appendChild(createChatThreadElement("New"));
+        return response.thread_id;
+    }
+
+    function addChatHistory(thread_id, userMessage, gptMessage){
+        const fetch_setting = 
+        { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json", "X-CSRFToken": '{{ csrf_token }}'},
+            body : JSON.stringify({ user_message: userMessage, gpt_message:gptMessage })
+        }
+        fetch(`http://127.0.0.1:8000/chat_bot/add_chat_history/${thread_id}/`, fetch_setting)
+        .then(response => {
+              if (!response.ok) {
+                alert('チャット履歴保存中にエラーが発生しました。');
+              }
+          });
+    }
+
+
+    function deleteThread(threadId) {
+      if (confirm("このチャットを削除しますか？")) {
+          fetch(`/chat_bot/delete/${threadId}/`, {
+              method: 'POST',
+              headers: {
+                  'X-CSRFToken': '{{ csrf_token }}',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ thread_id: threadId })
+          }).then(response => {
+              if (response.ok) {
+                if (threadId==thread_id){
+                    location.assign(response.url);
+                }else{
+                    location.reload();
+                }
+              } else {
+                  alert('削除中にエラーが発生しました。');
+              }
+          });
+      }
+  }
+  
+    function renameThread(threadId) {
+        const linkContainer = document.getElementById(`thread-${threadId}-link-container`);
+        const inputContainer = document.getElementById(`thread-${threadId}-input-container`);
+        const input = document.getElementById(`thread-${threadId}-input`);
+        const link = document.getElementById(`thread-${threadId}-link`);
+        input.value = link.innerText;
+        linkContainer.style.display = "none";
+        inputContainer.style.display = "flex";
+    }
+
+    function renameCancel(threadId) {
+        const linkContainer = document.getElementById(`thread-${threadId}-link-container`);
+        const inputContainer = document.getElementById(`thread-${threadId}-input-container`);
+        linkContainer.style.display = "flex";
+        inputContainer.style.display = "none";
+    }
+
+    function renameSave(threadId) {
+        const linkContainer = document.getElementById(`thread-${threadId}-link-container`);
+        const inputContainer = document.getElementById(`thread-${threadId}-input-container`);
+        const input = document.getElementById(`thread-${threadId}-input`);
+        const link = document.getElementById(`thread-${threadId}-link`);
+        linkContainer.style.display = "flex";
+        inputContainer.style.display = "none";
+        fetch(`/chat_bot/rename/${threadId}/`, {
+              method: 'POST',
+              headers: {
+                  'X-CSRFToken': '{{ csrf_token }}',
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ name: input.value })
+          }).then(response => {
+              if (response.ok) {
+                link.innerText = input.value;
+              } else {
+                  alert('名前変更中にエラーが発生しました。');
+              }
+          });
+    }
+  
+
+  $(function() {
+    var $textarea = $('#user-message');
+    var $messagesArea = $('#chat-messages');
+    var lineHeight = parseInt($textarea.css('lineHeight'));
+    $textarea.on('input', function(e) {
+        var lines = ($(this).val() + '\n').match(/\n/g).length;
+        $(this).height(lineHeight * lines);
+        const decHeight = lineHeight * lines + 50;
+        $messagesArea.height = `calc(100% - ${decHeight}px)`;
+    });
     });
 </script>
 {% endblock %}

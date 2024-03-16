@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'chat_bot',
+    'management',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'rest_framework',
-    'django_tables2',
+    'django_tables2',    
+    'adminlte3',
+    'adminlte3_theme',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'config.middleware.login_required.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -123,6 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'src/static/'
+STATIC_ROOT  = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -132,7 +137,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = 'src/media/'
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/accounts/login/'

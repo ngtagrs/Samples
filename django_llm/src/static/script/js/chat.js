@@ -18,7 +18,7 @@ function createChatThreadElement(name){
     return li;
 }
 
-function createChatElement(message, sender) {
+function createChatElementMessage(message, sender) {
     var userIconElement = document.createElement("img");
     userIconElement.setAttribute("src", `media/icon/${sender}.png`);
     userIconElement.setAttribute("width", "30");
@@ -44,19 +44,44 @@ function createChatElement(message, sender) {
 
     return displayElement;
 }
+function createChatElement(sender) {
+    var userIconElement = document.createElement("img");
+    userIconElement.setAttribute("src", `media/icon/${sender}.png`);
+    userIconElement.setAttribute("width", "30");
+    userIconElement.setAttribute("height", "30");
 
-async function sendMessage(message, thread_id) {  
-    var fetch_setting = 
-    { 
-        method: "POST", 
-        headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')}, 
-        body : JSON.stringify({ message: message })
-    }
-    const url = `http://127.0.0.1:8000/chat_bot/gpt/${thread_id}/`
-    return await fetch(url, fetch_setting)
-    .then(response => response.json())
-    .catch(error => console.error('Error:', error));
+    var userNameElement = document.createElement("div");
+    userNameElement.classList.add("user-name");
+    userNameElement.innerText = sender
+
+    var userPartElement = document.createElement("div");
+    userPartElement.className = "chat-user-part";
+    userPartElement.appendChild(userIconElement);
+    userPartElement.appendChild(userNameElement);
+
+    const messageElement = document.createElement('div');
+    messageElement.className = "chat-message"
+
+    var displayElement = document.createElement("div");
+    displayElement.className = "chat-element"
+    displayElement.appendChild(userPartElement);
+    displayElement.appendChild(messageElement);
+
+    return displayElement;
 }
+
+// async function sendMessage(message, thread_id) {  
+//     var fetch_setting = 
+//     { 
+//         method: "POST", 
+//         headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')}, 
+//         body : JSON.stringify({ message: message })
+//     }
+//     const url = `http://127.0.0.1:8000/chat_bot/gpt/${thread_id}/`
+//     return await fetch(url, fetch_setting)
+//     // .then(response => response.json())
+//     .catch(error => console.error('Error:', error));
+// }
 
 function getCookie(name) {
     let cookieValue = null;

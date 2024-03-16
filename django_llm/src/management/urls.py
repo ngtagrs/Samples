@@ -1,7 +1,10 @@
 from django.urls import path
-from management import views
+from . import views
 
 app_name = "management"
+
 urlpatterns = [
-    path("", views.index, name="index"),
+    path('', views.pdf_list, name='pdf_list'),
+    path('upload/', views.upload_pdf, name='upload_pdf'),
+    path('delete/<int:pdf_id>/', views.delete_pdf, name='delete_pdf'),
 ]

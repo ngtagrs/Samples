@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "276fc1e6ed724198f2860be1209f7a5608c6e35cce6a8a067a62e1d716d6cd20"
+            "sha256": "e4d58b373cf2e7221399e0a970375daa36ee7a5f15ff242dcc4cedb9b79f8ba0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -71,6 +71,14 @@
             ],
             "index": "pypi",
             "version": "==5.0.3"
+        },
+        "django-adminlte-3": {
+            "hashes": [
+                "sha256:a8f81b2b01bf1ac498c19a86ef40ea05517f90944d961bdf57d00eec739c4c2c",
+                "sha256:e81ac781da5111eced73ce30f04f95d5f2d0cf19ee226b1e1f92e2646a894aa0"
+            ],
+            "index": "pypi",
+            "version": "==0.1.6"
         },
         "django-bootstrap5": {
             "hashes": [
@@ -145,11 +153,11 @@
         },
         "openai": {
             "hashes": [
-                "sha256:5769b62abd02f350a8dd1a3a242d8972c947860654466171d60fb0972ae0a41c",
-                "sha256:ff6c6b3bc7327e715e4b3592a923a5a1c7519ff5dd764a83d69f633d49e77a7b"
+                "sha256:1fab5dd623cdc0c7c6e7da5d8d11fa6900f94191c2dfb6510d7eac33195fa175",
+                "sha256:f9322b0bf3b82bbd06930fad535369a023f35a3a96d3ef0b827644a15d7aae97"
             ],
             "index": "pypi",
-            "version": "==1.13.3"
+            "version": "==1.14.1"
         },
         "pydantic": {
             "hashes": [
