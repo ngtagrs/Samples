@@ -16,18 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path("", views.index, name="index"),
-    # path("api/", include('api.urls')),
-    path('', include('management.urls', namespace='management')),
-    path('search/', include('search.urls', namespace='search')),
-    path('chat_bot/', include('chat_bot.urls')),
-    path("accounts/", include("accounts.urls")),
+    path('', include('apps.management.urls', namespace='management')),
+    path('chat_bot/', include('apps.chat_bot.urls', namespace='chat_bot')),
+    path("accounts/", include("apps.accounts.urls", namespace='accounts')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

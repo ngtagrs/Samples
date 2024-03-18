@@ -10,6 +10,11 @@ django-rest-framework = "*"
 openai = "*"
 django-tables2 = "*"
 django-adminlte-3 = "*"
+pypdf2 = "*"
+langchain = "*"
+pdf2image = "*"
+llama-index = "*"
+pytesseract = "*"
 
 [dev-packages]
 

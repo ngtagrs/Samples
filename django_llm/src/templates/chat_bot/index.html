@@ -9,25 +9,25 @@
 
 {% block content %}
 <div class="d-flex flex-row w-100" style="height: calc(100% - 50px)">
-    <nav id="sidebar-nav" class="bg-dark d-flex flex-column" style="width: 300px;">
+    <nav id="sidebar-nav" class="bg-dark d-flex flex-column" style="width: 250px;">
         <div style="margin: 10px;">
             <form action="{% url 'chat_bot:chat_bot' %}" method="post" name="f_newchat">
                 {% csrf_token %}
-                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff;">New Chat</button>
+                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff; width: 200px;">New Chat</button>
             </form>
         </div>
         <ul id="sidebar-list" class="navbar-nav flex-column m-0 p-3" style="height: calc(100% - 300px);">
             {% for thread in threads %}
-            <li id="{{ thread.id }}" class="nav-item mx-3 text-muted side-nav-bar">
+            <li id="{{ thread.id }}" class="nav-item mx-3 text-muted side-nav-bar" style="width:200px;">
                 <div id="thread-{{ thread.id }}-link-container" style="display: flex;">
-                    <a id="thread-{{ thread.id }}-link" class="nav-link" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}" style="max-width: 150px; padding: 1px; width:auto;" >{{ thread.title }}</a>
+                    <a id="thread-{{ thread.id }}-link" class="nav-link" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}" style="max-width: 150px; padding: 1px; width:150px; color:#fff;" >{{ thread.title }}</a>
                     <button onclick="renameThread('{{ thread.id }}')" title="名前変更" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">...</button>
-                    <button onclick="deleteThread('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+                    <button onclick="deleteThread('{{ thread.id }}')" title="削除" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✕</button>
                 </div>
                 <div id="thread-{{ thread.id }}-input-container" style="display: none;">
-                    <input id="thread-{{ thread.id }}-input" type="text" style="max-width: 150px;">
-                    <button onclick="renameCancel('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px;">✕</button>
-                    <button onclick="renameSave('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px;">✓</button>
+                    <input id="thread-{{ thread.id }}-input" type="text" style="max-width: 150px; padding: 1px; width:150px;">
+                    <button onclick="renameCancel('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+                    <button onclick="renameSave('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✓</button>
                 </div>
             </li>
             {% endfor %}
@@ -36,18 +36,20 @@
         <div id="gpt-setting" style="font-size: 10px; margin: 10px;">
             <h3 style="color: #fff; font-size: 20px;">GPT Setting</h3>
             <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01" style="font-size: 12px;">Model</label>
-                <select class="form-select" id="inputGroupSelect01" value="{{ gpt_setting.model }}" style="font-size: 12px;">
+                <!-- <label class="input-group-text" for="inputGroupSelect01" style="font-size: 12px;">Model</label> -->
+                <label for="inputGroupSelect01" style="font-size: 12px; color:#fff;">Model</label>
+                <select class="form-select" id="inputGroupSelect01" value="{{ gpt_setting.model }}" style="font-size: 12px; width: 200px;">
                     {% for model in models %}
                     <option value="{{ model }}">{{ model }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <!-- <label style="color: #fff">Temperature</label> -->
             <div class="input-group mb-3">
-                <label class="input-group-text" for="temperatureInput" style="font-size: 12px;">Temperature</label>
+                <!-- <span class="input-group-prepend">
+                    <label class="input-group-text" for="temperatureInput" style="font-size: 12px; width:80px">Temperature</label>
+                </span> -->
+                <label for="temperatureInput" style="font-size: 12px; color:#fff;">Temperature</label>
                 <input id="temperatureInput" class="form-control" type="number" min=0 max="2" step=0.01 value="{{ gpt_setting.temperature }}" style="font-size: 12px;">
-                <!-- <input id="temperatureInput" class="form-control" type="range" min="0" max="100" style="font-size: 12px;"> -->
             </div>
         </div>
     </nav>
@@ -69,9 +71,10 @@
             {% endfor %}
         </div>
         <div id="message-form" class="input-group">
-            <textarea id="user-message" style="height: 30px; min-height: 30px; max-height: 200px; width: calc(100% - 50px); line-height: 20px;"></textarea>
-            <!-- <button id="file-upload" class="btn btn-outline-secondary" type="button" style="height: 30px; align-self: flex-end;"></button> -->
-            <button id="message-send-button" class="btn btn-outline-secondary" type="button" style="height: 30px;"><img src="{{ MEDIA_URL }}/icon/gpt.png" width="20px" height="20px"></button>
+            <textarea id="user-message" class="form-control" style="height:35px; min-height: 35px; max-height: 200px; width: calc(100% - 50px); line-height: 20px; border-radius: 5px;"></textarea>
+            <span class="input-group-append" style="align-items: end;">
+                <button id="message-send-button" class="btn btn-outline-secondary" type="button" style="height: 35px;"><img src="{{ MEDIA_URL }}/icon/gpt.png" width="20px" height="20px"></button>
+            </span>
         </div>
     </main>
 </div>
@@ -99,18 +102,6 @@
             sendMessage();
         }
     });
-
-    document.getElementById("user-message").addEventListener("input", function() {
-        adjustChatHeight();
-    });
-
-    function adjustChatHeight() {
-        var messageFormHeight = document.getElementById("message-form").clientHeight;
-        var chatMessagesHeight = document.getElementById("chat-messages").clientHeight;
-        var windowHeight = window.innerHeight;
-        var newChatMessagesHeight = windowHeight - messageFormHeight;
-        document.getElementById("chat-messages").style.height = newChatMessagesHeight + "px";
-    }
 
     async function sendMessage(){
         if (userMessage.value == "") return;
@@ -167,7 +158,7 @@
         addChatHistory(thread_id, userMessageElement.innerText, gptMessageElement.innerText);
         
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
+        //location.reload();
 
     }
 
@@ -270,7 +261,7 @@
         var lines = ($(this).val() + '\n').match(/\n/g).length;
         $(this).height(lineHeight * lines);
         const decHeight = lineHeight * lines + 50;
-        $messagesArea.height = `calc(100% - ${decHeight}px)`;
+        $messagesArea.height(100% - `${decHeight}px`);
     });
     });
 </script>

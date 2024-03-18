@@ -9,16 +9,7 @@ header{
 nav {
     width: 230px;
 }
-/* .header-nav-link {
-    color: white;
-    font-size: 20px;
-}
-.side-nav-link {
-    color: #fff;
-} */
-main {
-    transition: 0.3s all ease;
-}
+
 header h1 {
     margin: 0;
     font-size: 25px;
@@ -69,4 +60,5 @@ main {
     width: 100%;
     height: 100%;
     padding-top: 10px;
+    transition: 0.3s all ease;
 }

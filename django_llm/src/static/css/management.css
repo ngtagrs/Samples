@@ -34,6 +34,14 @@ h1, h2, h3 {
     cursor: pointer;
     font-size: 18px;
 }
+.edit-btn {
+    background-color: transparent;
+    color: green;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 18px;
+}
 
 .upload-form {
     margin-top: 20px;
