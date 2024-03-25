@@ -15,13 +15,16 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-lg" style="background-color: #ccc; height: calc(100% - 50px);">
-  <div class="d-flex">
-    <div class="card" style="width:50%; margin: 5px; min-height: 620px;">
+<div style="height: calc(100% - 50px);">
+  <div class="content-header">
+    <h1 class="m-0" style="color: #fff;">Management Files</h1>
+  </div>
+  <div class="d-flex justify-content-between">
+    <div class="card mx-5" style="width:50%; min-height: 620px;">
       <div class="card-header">
-        <h3 class="card-title">リスト</h3>
+        <h3 class="card-title">Files</h3>
       </div>
-      <div class="card-body p-2">
+      <div class="card-body">
         <table id="document-list-table" class="table table-bordered table-striped">
           <thead>
             <tr>
@@ -41,11 +44,11 @@
       </div>
     </div>
 
-    <div class="card" style="width:50%; margin: 5px;">
+    <div class="card mx-5" style="width:50%; margin: 5px;">
       <div class="card-header">
-        <h3 class="card-title">グループ</h3>
+        <h3 class="card-title">Groups</h3>
       </div>
-      <div class="card-body p-2">
+      <div class="card-body">
         <table id="document-group-table" class="table table-bordered table-striped">
           <thead>
             <tr>
@@ -68,16 +71,19 @@
     </div>
   </div>
 
-  <div style="margin-top: 30px;">
-    <h2>アップロード</h2>
-    <form id="uploadForm" class="input-group" action="{% url 'management:upload_pdf' %}" method="post"
-      enctype="multipart/form-data" class="upload-form">
-      {% csrf_token %}
-      <input type="file" id="pdfInput" name="pdf_files" multiple onchange="handleFileSelect()" class="file-input">
-      <!-- <ul id="fileList" class="file-list"></ul> -->
-      <table id="document-upload-table" class="table table-bordered table-striped" style="background-color: #fff;"></table>
-      <button type="submit" id="uploadBtn" class="upload-btn" style="display: none;">アップロード</button>
-    </form>
+  <div class="card mx-5" style="width:50%; margin: 5px;">
+    <div class="card-header">
+      <h2 class="card-title">Upload</h2>
+    </div>
+    <div class="card-body"></div>
+      <form id="uploadForm" class="input-group" action="{% url 'management:upload_pdf' %}" method="post"
+        enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        <input type="file" id="pdfInput" name="pdf_files" multiple onchange="handleFileSelect()" class="file-input">
+        <table id="document-upload-table" class="table table-bordered table-striped" style="background-color: #fff;"></table>
+        <button type="submit" id="uploadBtn" class="upload-btn" style="display: none;">アップロード</button>
+      </form>
+    </div>
   </div>
 </div>
 {% endblock %}

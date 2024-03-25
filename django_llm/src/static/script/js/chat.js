@@ -3,9 +3,10 @@ const gpt_url = "http://127.0.0.1:8000/chat_bot/gpt/"
 function createChatThreadElement(name){
     const li = document.createElement('li');
     li.classList.add("nav-item");
-    li.classList.add("mx-3");
-    li.classList.add("text-muted");
+    li.classList.add("d-none");
+    li.classList.add("d-sm-inline-block");
     li.classList.add("side-nav-bar");
+    li.style = "width:200px;"
     
     const a = document.createElement("a");
     a.classList.add("nav-link");

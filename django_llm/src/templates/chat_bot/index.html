@@ -9,25 +9,25 @@
 
 {% block content %}
 <div class="d-flex flex-row w-100" style="height: calc(100% - 50px)">
-    <nav id="sidebar-nav" class="bg-dark d-flex flex-column" style="width: 250px;">
+    <nav id="sidebar-nav" class="navbar-dark bg-dark d-flex flex-column" style="width: 250px;">
         <div style="margin: 10px;">
             <form action="{% url 'chat_bot:chat_bot' %}" method="post" name="f_newchat">
                 {% csrf_token %}
-                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff; width: 200px;">New Chat</button>
+                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff; width: 200px; box-shadow: 3px 3px 3px 0 rgba(0,0,0,0.5);">New Chat</button>
             </form>
         </div>
         <ul id="sidebar-list" class="navbar-nav flex-column m-0 p-3" style="height: calc(100% - 300px);">
             {% for thread in threads %}
-            <li id="{{ thread.id }}" class="nav-item mx-3 text-muted side-nav-bar" style="width:200px;">
+            <li id="{{ thread.id }}" class="nav-item d-none d-sm-inline-block side-nav-bar" style="width:200px;">
                 <div id="thread-{{ thread.id }}-link-container" style="display: flex;">
-                    <a id="thread-{{ thread.id }}-link" class="nav-link" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}" style="max-width: 150px; padding: 1px; width:150px; color:#fff;" >{{ thread.title }}</a>
-                    <button onclick="renameThread('{{ thread.id }}')" title="名前変更" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">...</button>
-                    <button onclick="deleteThread('{{ thread.id }}')" title="削除" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+                    <a id="thread-{{ thread.id }}-link" class="nav-link" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}" style="max-width: 150px; padding: 1px; width:150px;" >{{ thread.title }}</a>
+                    <button onclick="renameThread('{{ thread.id }}')" title="名前変更" style="background-color: transparent;border-width: 0; margin-left: 10px; width:10px;">...</button>
+                    <button onclick="deleteThread('{{ thread.id }}')" title="削除" style="background-color: transparent; border-width: 0; margin-left: 10px; width:10px;">✕</button>
                 </div>
                 <div id="thread-{{ thread.id }}-input-container" style="display: none;">
-                    <input id="thread-{{ thread.id }}-input" type="text" style="max-width: 150px; padding: 1px; width:150px;">
-                    <button onclick="renameCancel('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✕</button>
-                    <button onclick="renameSave('{{ thread.id }}')" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 10px; width:10px;">✓</button>
+                    <input id="thread-{{ thread.id }}-input" type="text" style="max-width: 150px; padding: 1px; width:150px; color: #000;">
+                    <button onclick="renameCancel('{{ thread.id }}')" style="background-color: transparent; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+                    <button onclick="renameSave('{{ thread.id }}')" style="background-color: transparent; border-width: 0; margin-left: 10px; width:10px;">✓</button>
                 </div>
             </li>
             {% endfor %}

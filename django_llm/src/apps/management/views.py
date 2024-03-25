@@ -12,11 +12,11 @@ def pdf_list(request):
 
 def upload_pdf(request):
     if request.method == 'POST':
-        with ChatAgent() as llamaindex_agent:
-            for file in request.FILES.getlist('pdf_files'):
-                new_pdf = Document(name=file.name, document=file, created_by=request.user)
-                new_pdf.save()
-                llamaindex_agent.add_new_document(f"media/pdfs/${file.name}")
+        # with ChatAgent() as llamaindex_agent:
+        for file in request.FILES.getlist('pdf_files'):
+            new_pdf = Document(name=file.name, document=file, created_by=request.user)
+            new_pdf.save()
+                # llamaindex_agent.add_new_document(f"media/pdfs/${file.name}")
     return redirect('management:pdf_list')
 
 def delete_pdf(request, pdf_id):

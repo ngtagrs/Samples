@@ -10,6 +10,8 @@
         {% bootstrap_css %}
         {% bootstrap_javascript %}
         
+        {% include 'adminlte/lib/_styles.html' %}
+        
         <title>RAG Chat</title>
         <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/> 
         <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
@@ -17,36 +19,44 @@
 
     </head>
     <body class="h-100">
-        <header class="w-100 d-flex justify-content-between align-items-center bg-dark px-3">
-            <h1 class="fw-bold" style="color: #fff;">RAG Chat</h1>
+        <nav class="navbar-dark w-100 d-flex justify-content-between align-items-center bg-dark px-3">
+            <h3 class="fw-bold">RAG Chat</h1>
             <ul class="navbar-nav d-flex flex-row center">
-                <li class="nav-item mx-3 text-muted header-nav-link">
-                    <a class="nav-link active" aria-current="page" href="{% url 'management:pdf_list' %}" style="color: #fff;">Home</a>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a class="nav-link" aria-current="page" href="{% url 'management:pdf_list' %}">Home</a>
                 </li>
-                <li class="nav-item mx-3 text-muted header-nav-link">
-                    <a class="nav-link" href="{% url 'chat_bot:chat_bot' %}" style="color: #fff;">Chat Bot</a>
+                <li class="nav-item d-none d-sm-inline-block ml-5">
+                    <a class="nav-link" href="{% url 'chat_bot:chat_bot' %}">Chat Bot</a>
                 </li>
             </ul>
 
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <form action="{% url 'accounts:logout' %}" method="post" name="f_logout">
-                        {% csrf_token %}
-                        <input type="hidden" value="logout">
-                        <a href="javascript:f_logout.submit()" class="logout nav-link" style="color:#fff">ログアウト</a>
-                    </form>
+                <li class="nav-item d-none d-sm-inline-block dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <img src="{{ MEDIA_URL }}/icon/user.png" width="30" height="30">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="dropdown-divider"></div>
+                        <form action="{% url 'accounts:logout' %}" method="post" name="f_logout">
+                            {% csrf_token %}
+                            <input type="hidden" value="logout">
+                            <button onclick="javascript:f_logout.submit()" class="logout">Logout</button>
+                        </form>
+                    </div>
                 </li>
-                {% else %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a></li>
                 {% endif %}
             </ul>
-        </header>
+        </nav>
 
-        {% block content %}
-        {% endblock %}
+        <div class="conttent-wrapper">
+            {% block content %}
+            {% endblock %}
+        </div>
 
         {% block script %}
         {% endblock %}
+        
+        {% include 'adminlte/lib/_scripts.html' %}
     </body>
 </html>
