@@ -32,6 +32,11 @@ def chat(request, thread_id):
     context = {"threads":threads, "models":models.get_models(), "gpt_setting":gpt_setting, "now_thread":now_thread, "chats":now_thread.chats.all(), "js_data":json.dumps(js_data)}
     return render(request, "chat_bot/index.html", context)
 
+def new_chat(request):
+    thread = Thread(title="New", created_by=request.user)
+    thread.save()
+    return redirect("chat_bot:chat_thread", thread.id)
+
 openai.api_key = ""
 class ChatGPTStreamView(APIView):
     def post(self, request, thread_id):

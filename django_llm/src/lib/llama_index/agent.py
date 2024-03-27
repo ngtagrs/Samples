@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from .custom_reader import CustomPDFReader
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from llama_index.core.service_context import ServiceContext
 from llama_index.core.storage.storage_context import StorageContext
 from llama_index.core.indices.loading import load_index_from_storage

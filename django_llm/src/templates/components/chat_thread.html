@@ -1,0 +1,12 @@
+<li id="{{ thread.id }}" class="nav-item d-none d-sm-inline-block side-nav-bar" style="width:200px;">
+    <div id="thread-{{ thread.id }}-link-container" style="display: flex;">
+        <a id="thread-{{ thread.id }}-link" class="nav-link" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}" style="max-width: 150px; padding: 1px; width:150px;" >{{ thread.title }}</a>
+        <button onclick="renameThread('{{ thread.id }}')" title="名前変更" style="background-color: transparent;border-width: 0; margin-left: 10px; width:10px;">...</button>
+        <button onclick="deleteThread('{{ thread.id }}')" title="削除" style="background-color: transparent; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+    </div>
+    <div id="thread-{{ thread.id }}-input-container" style="display: none;">
+        <input id="thread-{{ thread.id }}-input" type="text" style="max-width: 150px; padding: 1px; width:150px; color: #000;">
+        <button onclick="renameCancel('{{ thread.id }}')" style="background-color: transparent; border-width: 0; margin-left: 10px; width:10px;">✕</button>
+        <button onclick="renameSave('{{ thread.id }}')" style="background-color: transparent; border-width: 0; margin-left: 10px; width:10px;">✓</button>
+    </div>
+</li>

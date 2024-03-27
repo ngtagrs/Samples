@@ -1,0 +1,11 @@
+<div class="chat-element">
+    <div class="chat-user-part">
+        {% if chat.sender == "GPT" %}
+        <img src="{{ MEDIA_URL }}/icon/gpt.png" width="30" height="30">
+        {% else %}
+        <img src="{{ MEDIA_URL }}/icon/user.png" width="30" height="30">
+        {% endif %}
+        <div class="user-name">{{ chat.sender }}</div>
+    </div>
+    <div class="chat-message" style="white-space: pre-line;">{{ chat.message }}</div>
+</div>

@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 app_name = "chat_bot"
 urlpatterns = [
     path("", views.index, name="chat_bot"),
+    path("new_chat", views.new_chat, name="new_chat"),
     path("<int:thread_id>/", views.chat, name="chat_thread"),
     path("gpt/<int:thread_id>/", views.ChatGPTStreamView.as_view(), name="gpt"),
     path("delete/<int:thread_id>/", views.delete_thread, name="delete_thread"),
