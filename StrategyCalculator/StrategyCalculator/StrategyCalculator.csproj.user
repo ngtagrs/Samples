@@ -7,44 +7,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="View\Controls\ConditionBlock.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Controls\ParameterBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Controls\ProcessBlock.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Controls\CustomProgressBar.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Controls\TimeBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="View\Controls\TradeBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="View\Controls\ConditionBlock.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Controls\ParameterBox.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Controls\ProcessBlock.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Controls\CustomProgressBar.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Controls\TimeBox.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="View\Controls\TradeBox.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="View\MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

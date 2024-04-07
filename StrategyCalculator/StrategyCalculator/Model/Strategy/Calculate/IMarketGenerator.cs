@@ -8,6 +8,6 @@ namespace StrategyCalculator.Model
 {
     public interface IMarketGenerator
     {
-        Dictionary<string, Dictionary<string, double>> Generate(IEnumerable<TradeData> trades_);
+        //Dictionary<string, Dictionary<string, double>> Generate(IEnumerable<TradeData> trades_);
     }
 }

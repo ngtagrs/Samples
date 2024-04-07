@@ -1,5 +1,4 @@
 ﻿using StrategyCalculator.Model;
-using StrategyCalculator.View.Controls;
 using StrategyCalculator.ViewModel;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -8,19 +7,19 @@ namespace StrategyCalculator
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<TimeTrade> TimeTrades { get; set; }
+        //public ObservableCollection<TimeTrade> TimeTrades { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
-            TimeTrades = new ObservableCollection<TimeTrade>();
+            //TimeTrades = new ObservableCollection<TimeTrade>();
             DataContext = new MainViewModel();
         }
 
         private void AddTimeTradeButton_Click(object sender, RoutedEventArgs e)
         {
             // ボタンがクリックされたときの処理
-            this.TimePanel.Children.Add(new TimeBox());
+            //this.TimePanel.Children.Add(new TimeBox());
             //TimeTrades.Add(new TimeTrade { Time = "新しい時間", Conditions = new List<Model.Condition>() });
         }
 
@@ -43,7 +42,7 @@ namespace StrategyCalculator
 
         private void AddTradeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.TradePanel.Children.Add(new TradeBox());
+            //this.TradePanel.Children.Add(new TradeBox());
         }
 
         private void AddParameterDefinitionButton_Click(object sender, RoutedEventArgs e)
@@ -51,11 +50,5 @@ namespace StrategyCalculator
 
         }
 
-        private void UpdateTabButton_Click(object sender, RoutedEventArgs e)
-        {
-            var cnt = ((MainViewModel)this.DataContext).TestDic1.Count;
-            ((MainViewModel)this.DataContext).TestDic1.Add($"{cnt+1}", new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, });
-            ((MainViewModel)this.DataContext).TestDic2.Add($"{cnt + 1}", new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, });
-        }
     }
 }

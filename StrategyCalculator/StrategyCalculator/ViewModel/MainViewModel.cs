@@ -1,25 +1,37 @@
-﻿using System;
+﻿
+using StrategyCalculator.Model;
+using StrategyCalculator.Model.Strategy;
+using StrategyCalculator.Model.Strategy.Component;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace StrategyCalculator.ViewModel
 {
-    public class MainViewModel
+    public partial class MainViewModel
     {
-        private Dictionary<string, List<double>> _testDic1;
-        private ObservableDictionary<string, List<double>> _testDic2;
+        private Strategy _strategy;
+        private Options _options;
 
         public MainViewModel()
         {
-            _testDic1 = new Dictionary<string, List<double>>();
-            _testDic2 = new ObservableDictionary<string, List<double>>();
-            _testDic1.Add("1", new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, });
-            _testDic2.Add("1", new List<double>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, });
+            _strategy = new Strategy();
+            _options = new Options();
         }
 
-        public Dictionary<string, List<double>> TestDic1 { get {  return _testDic1; } }
-        public ObservableDictionary<string, List<double>> TestDic2 { get { return _testDic2; } }  
+        public Strategy Strategy
+        {
+            get { return _strategy; }
+        }
+
+        public Options Options
+        {
+            get { return _options; }
+        }
     }
 }
