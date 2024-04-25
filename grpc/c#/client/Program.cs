@@ -8,11 +8,11 @@ namespace client
     internal class Program
     {
         const string target = "127.0.0.1:50051";
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Channel channel = new Channel(target, ChannelCredentials.Insecure);
 
-            channel.ConnectAsync().ContinueWith((task) =>
+            await channel.ConnectAsync().ContinueWith((task) =>
             {
                 if (task.Status == TaskStatus.RanToCompletion)
                     Console.WriteLine("The client connected successfully");
@@ -27,15 +27,24 @@ namespace client
                 LastName = "Nagata"
             };
 
-            var request = new GreetingRequest() { Greeting = greeting };
-            var response = client.Greet(request);
+            //var request = new GreetingRequest() { Greeting = greeting };
+            //var response = client.Greet(request);
 
-            Console.WriteLine(response.Result);
+            //Console.WriteLine(response.Result);
 
-            var calculatorClient = new CalculatorService.CalculatorServiceClient(channel);
-            var calculationRequest = new CalculateRequest() { Value1 = 2, Value2 = 3 };
-            var calculatorResponse = calculatorClient.Calculate(calculationRequest);
-            Console.WriteLine($"{calculatorResponse.Answer}");
+            var request = new GreetingManyTimesRequest() { Greeting = greeting };
+            var response = client.GreetManyTimes(request);
+
+            while (await response.ResponseStream.MoveNext())
+            {
+                Console.WriteLine(response.ResponseStream.Current.Result);
+                await Task.Delay(200);
+            }
+
+            //var calculatorClient = new CalculatorService.CalculatorServiceClient(channel);
+            //var calculationRequest = new CalculateRequest() { Value1 = 2, Value2 = 3 };
+            //var calculatorResponse = calculatorClient.Calculate(calculationRequest);
+            //Console.WriteLine($"{calculatorResponse.Answer}");
 
             channel.ShutdownAsync().Wait();
             Console.ReadKey();
