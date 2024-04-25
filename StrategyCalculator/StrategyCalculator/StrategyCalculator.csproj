@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Model\Strategy\Calculate\Operations\Position\" />
+    <Folder Include="Model\Strategy\Calculate\Operations\Closing\" />
+    <Folder Include="Model\Strategy\Calculate\Operations\Hedge\" />
+    <Folder Include="Model\Strategy\Calculate\Operations\Fee\" />
+    <Folder Include="Model\Strategy\Calculate\Operations\新しいフォルダー\" />
     <Folder Include="View\Controls\" />
   </ItemGroup>
 

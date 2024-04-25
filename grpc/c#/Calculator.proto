@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package calculator;
+
+message CalculateRequest{
+	int32 value1 = 1;
+	int32 value2 = 2;
+}
+
+message CalculateResponse{
+	int32 answer = 1;
+}
+
+service CalculatorService{
+	rpc Calculate(CalculateRequest) returns (CalculateResponse) {};
+}
