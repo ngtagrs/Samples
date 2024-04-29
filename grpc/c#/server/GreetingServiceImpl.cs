@@ -30,5 +30,32 @@ namespace server
                 await responseStream.WriteAsync(new GreetingManyTimesResponse() { Result = result });
             }
         }
+
+        public override async Task<LongGreetResponse> LongGreet(IAsyncStreamReader<LongGreetRequest> requestStream, ServerCallContext context)
+        {
+            string result = "";
+
+            while (await requestStream.MoveNext())
+            {
+                result += string.Format("Hello {0} {1} {2}",
+                    requestStream.Current.Greeting.FirstName,
+                    requestStream.Current.Greeting.LastName,
+                    Environment.NewLine);
+            }
+
+            return new LongGreetResponse() { Result = result };
+        }
+
+        public override async Task GreetEveryone(IAsyncStreamReader<GreetEveryoneRequest> requestStream, IServerStreamWriter<GreetEveryoneResponse> responseStream, ServerCallContext context)
+        {
+            while(await requestStream.MoveNext())
+            {
+                var result = String.Format("Hello {0} {1}",
+                    requestStream.Current.Greeting.FirstName,
+                    requestStream.Current.Greeting.LastName);
+                Console.WriteLine("Received : " + result);
+                await responseStream.WriteAsync(new GreetEveryoneResponse() { Result = result });
+            }
+        }
     }
 }
