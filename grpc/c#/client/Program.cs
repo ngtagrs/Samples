@@ -11,7 +11,13 @@ namespace client
         const string target = "127.0.0.1:50051";
         static async Task Main(string[] args)
         {
-            Channel channel = new Channel(target, ChannelCredentials.Insecure);
+            var clientCert = File.ReadAllText("ssl/client.crt");
+            var clientKey = File.ReadAllText("ssl/client.key");
+            var caCrt = File.ReadAllText("ssl/ca.crt");
+
+            var channelCredential = new SslCredentials(caCrt, new KeyCertificatePair(clientCert, clientKey));
+
+            Channel channel = new Channel("localhost", 50051, channelCredential);
 
             await channel.ConnectAsync().ContinueWith((task) =>
             {
@@ -19,15 +25,16 @@ namespace client
                     Console.WriteLine("The client connected successfully");
             });
 
-            //await UnaryGreeting(channel);
+            await UnaryGreeting(channel);
             //await ServerStreamingGreeting(channel);
             //await ClientStreamingGreeting(channel);
             //await BidiGreeting(channel);
+            //await DeadlineGreeting(channel);
             //await UnaryCalculate(channel);
             //await ServerStreamingCalculate(channel);
             //await ClientStreamingCalculate(channel);
             //await BidiStreamingCalculate(channel);
-            await Sqrt(channel);
+            //await Sqrt(channel);
 
             channel.ShutdownAsync().Wait();
             Console.ReadKey();
@@ -124,6 +131,21 @@ namespace client
 
             await stream.RequestStream.CompleteAsync();
             await responseReaderTask;
+        }
+
+        private static async Task DeadlineGreeting(Channel channel)
+        {
+            var client = new GreetingService.GreetingServiceClient(channel);
+
+            try
+            {
+                var response = client.GreetWithDeadline(new GreetingDeadlineRequest() { Name = "John" }, deadline:DateTime.UtcNow.AddMilliseconds(100));
+                Console.WriteLine(response.Result);
+            }
+            catch(RpcException e) when (e.StatusCode == StatusCode.DeadlineExceeded)
+            {
+                Console.WriteLine($"Error : {e.Status.Detail}");
+            }
         }
 
         private async static Task UnaryCalculate(Channel channel)

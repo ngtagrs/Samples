@@ -8,15 +8,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proto", "proto", "{0D757F60
 		Calculator.proto = Calculator.proto
 		dummy.proto = dummy.proto
 		greeting.proto = greeting.proto
+		sqrt.proto = sqrt.proto
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "client", "client\client.csproj", "{99212E34-A303-4853-987F-46053556A579}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "server", "server\server.csproj", "{16B0716A-2FF0-4AC8-97BC-9C6BC8BC006F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{5D0DA299-E926-405E-A516-BD917737E950}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{46DF0807-5E5F-4AB5-AD1B-006B8AF56D4D}"
 	ProjectSection(SolutionItems) = preProject
-		sqrt.proto = sqrt.proto
+		ssl\ssl.sh = ssl\ssl.sh
 	EndProjectSection
 EndProject
 Global

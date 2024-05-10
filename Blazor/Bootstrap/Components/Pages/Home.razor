@@ -1,0 +1,72 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<Grid TItem="Employee" class="table table-hover table-bordered table-striped" DataProvider="EmployeesDataProvider" Responsive="true">
+    <GridColumn TItem="Employee" HeaderText="Id" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+        @context.Id
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="First Name">
+        @context.FirstName
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="First Name">
+        @context.LastName
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="Email">
+        @context.Email
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="Company" TextNoWrap="true">
+        @context.Company
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="Designation" TextNoWrap="true">
+        @context.Designation
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="DOJ">
+        @context.DOJ
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="Salary" HeaderTextAlignment="Alignment.End" TextAlignment="Alignment.End">
+        @context.Salary?.ToString("N2")
+    </GridColumn>
+    <GridColumn TItem="Employee" HeaderText="Active" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+        @context.IsActive
+    </GridColumn>
+</Grid>
+
+
+@code {
+    public class Employee(){
+        public int? Id{get;set;}
+        public string? FirstName{get;set;}
+        public string? LastName {get;set;}
+        public string? Email {get;set;}
+        public string? Company{get;set;}
+        public string? Designation {get;set;}
+        public DateOnly? DOJ {get;set;}
+        public decimal? Salary {get;set;}
+        public bool? IsActive {get;set;}
+    }
+
+    private IEnumerable<Employee> employees;
+    protected override void OnInitialized()
+    {
+        employees = new List<Employee>
+        {
+            new Employee { Id = 107, FirstName = "Alice", LastName = "Reddy", Email = "alice@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "AI Engineer", DOJ = new DateOnly(1998, 11, 17), Salary = 7700, IsActive = true },
+            new Employee { Id = 103, FirstName = "Bob", LastName = "Roy", Email = "bob@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Senior DevOps Engineer", DOJ = new DateOnly(1985, 1, 5), Salary = 19000, IsActive = true },
+            new Employee { Id = 106, FirstName = "John", LastName = "Papa", Email = "john@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Data Engineer", DOJ = new DateOnly(1995, 4, 17), Salary = 12000, IsActive = true },
+            new Employee { Id = 104, FirstName = "Pop", LastName = "Two", Email = "pop@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Associate Architect", DOJ = new DateOnly(1985, 6, 8), Salary = 19000, IsActive = false },
+            new Employee { Id = 105, FirstName = "Ronald", LastName = "Dire", Email = "ronald@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Senior Data Engineer", DOJ = new DateOnly(1991, 8, 23), Salary = 16500.50M, IsActive = true },
+            new Employee { Id = 102, FirstName = "Line", LastName = "K", Email = "line@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Architect", DOJ = new DateOnly(1977, 1, 12), Salary = 24000, IsActive = true },
+            new Employee { Id = 101, FirstName = "Daniel", LastName = "Potter", Email = "daniel@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Architect", DOJ = new DateOnly(1977, 1, 12), Salary = 21000, IsActive = true },
+            new Employee { Id = 108, FirstName = "Zayne", LastName = "Simmons", Email = "zayne@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "Data Analyst", DOJ = new DateOnly(1991, 1, 1), Salary = 17850, IsActive = true },
+            new Employee { Id = 109, FirstName = "Isha", LastName = "Davison", Email = "isha@blazorbootstrap.com", Company = "BlazorBootstrap Company", Designation = "App Maker", DOJ = new DateOnly(1996, 7, 1), Salary = 8000, IsActive = true },
+        };
+    }
+
+    private async Task<GridDataProviderResult<Employee>> EmployeesDataProvider(GridDataProviderRequest<Employee> request)
+    {
+        return await Task.FromResult(request.ApplyTo(employees));
+    }
+}
