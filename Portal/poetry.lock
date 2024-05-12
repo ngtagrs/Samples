@@ -38,6 +38,34 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-adminlte3"
+version = "0.1.6"
+description = "Admin LTE templates, admin theme, and template tags for Django"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "django-adminlte3-0.1.6.tar.gz", hash = "sha256:46d10068979145fa997051ddc78a29fc264ab2f17de321f38ed40c71dad3ca7e"},
+    {file = "django_adminlte3-0.1.6-py3-none-any.whl", hash = "sha256:f11bfc828830f9e6b0692a5ac597151372baca31eaa23733ae23be4cdb677aa6"},
+]
+
+[package.dependencies]
+django = "*"
+
+[[package]]
+name = "django-currentuser"
+version = "0.7.0"
+description = "Conveniently store reference to request user on thread/db level."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "django-currentuser-0.7.0.tar.gz", hash = "sha256:626ecd5ba82bb8b1315789eb95adfdfd953046a66cf6a95424aa957724b15b7a"},
+    {file = "django_currentuser-0.7.0-py2.py3-none-any.whl", hash = "sha256:6e6c48e285b652c515c067ffc98ff74b2d5daf289125b15fedcbc88629db4c5d"},
+]
+
+[package.dependencies]
+Django = ">=3.2,<4.0 || >4.0,<4.1 || >4.1,<5.1"
+
+[[package]]
 name = "sqlparse"
 version = "0.5.0"
 description = "A non-validating SQL parser."
@@ -77,4 +105,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "84b3a3b95af4c4f2bda13f7f054a81d92d143e633b7384f5a2ba544e27e0e262"
+content-hash = "e7ccb3bf82a3e9f7c7a19493c2687609cfb5c09a18b1b854c625d1e030b37b34"

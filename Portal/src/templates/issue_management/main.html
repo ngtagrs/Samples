@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block page_name %}案件管理{% endblock %}
+
+{% block content_outer %}
+<!-- <ul class="todo-list ui-sortable" data-widget="todo-list">
+    {% for issue in issues %}
+    <li class="">
+        <span class="handle ui-sortable-handle">
+            <i class="fas fa-ellipsis-v"></i>
+            <i class="fas fa-ellipsis-v"></i>
+        </span>
+        <div class="icheck-primary d-inline ml-2">
+            <input type="checkbox" value="" name="todo2" id="todoCheck2" checked="">
+            <label for="todoCheck2"></label>
+        </div>
+        <span class="">{{ issue.status.status }}</span>
+        <span class="text">{{ issue.title }}</span>
+        <span class="">{{ issue.description }}</span>
+        <span class="">{{ issue.category.category }}</span>
+        <span class="">{{ issue.pic }}</span>
+        <span class="">{{ issue.registered_at }}</span>
+        <small class="badge badge-info"><i class="far fa-clock"></i> 4 hours</small>
+        <div class="tools">
+            <i class="fas fa-edit"></i>
+            <i class="fas fa-trash-o"></i>
+        </div>
+    </li>
+    {% endfor %}
+</ul> -->
+
+<div class="card m-2">
+    <div class="card-header">
+        <h3 class="card-title">案件リスト</h3>
+        <button type="button" class="btn btn-success btn-sm ml-3" data-toggle="modal" data-target="#newIssueModal">
+            <i class="fas fa-plus"></i>追加
+        </button>
+        <div class="modal fade" id="newIssueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">New Issue</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">送信</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        <div class="card-tools">
+            <ul class="pagination pagination-sm float-right">
+                <li class="page-item"><a class="page-link" href="#">«</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">»</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card-body p-0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 10px">ID</th>
+                    <th>Status</th>
+                    <th>案件名</th>
+                    <th>概要</th>
+                    <th>分類</th>
+                    <th>担当者</th>
+                    <th>最終更新日</th>
+                    <th>登録日</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr onclick="location.href='{% url 'issue_detail' issue_id=issue.pk %}'">
+                    <td>{{ issue.id }}</td>
+                    <td><span class="badge bg-danger">{{ issue.status.status }}</span></td>
+                    <td>{{ issue.title }}</td>
+                    <td>{{ issue.description }}</td>
+                    <td>{{ issue.category.category }}</td>
+                    <td>{{ issue.pic }}</td>
+                    <td>{{ issue.updated_at }}</td>
+                    <td>{{ issue.registered_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}
