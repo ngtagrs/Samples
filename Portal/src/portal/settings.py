@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'adminlte3',
     'adminlte3_theme',
-    'apps.issue_management.apps.IssueManagementConfig',
+    'apps.accounts.apps.AccountsConfig',
     'apps.home.apps.HomeConfig',
+    'apps.issue_management.apps.IssueManagementConfig',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,7 @@ STATIC_ROOT = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

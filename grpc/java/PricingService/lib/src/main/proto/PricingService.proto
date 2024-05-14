@@ -1,0 +1,15 @@
+syntax = "proto3"
+
+package "grpc"
+
+message PricingServiceRequest {
+    String req = 1;
+}
+
+message PricingServiceResponse {
+    String res = 1;
+}
+
+sevice PricingService(){
+    rpc Pricing(PricingServiceRequest) returns (PricingServiceResponse);
+}

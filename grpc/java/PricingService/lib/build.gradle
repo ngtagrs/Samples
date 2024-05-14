@@ -9,8 +9,9 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+    id 'application'
     id 'idea'
-    id 'com.google.protobuf' version '0.8.18'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 repositories {
@@ -18,34 +19,22 @@ repositories {
     mavenCentral()
 }
 
-protobuf {
-  protoc {
-    artifact = "com.google.protobuf:protoc:3.21.1"
-  }
-  plugins {
-    grpc {
-      artifact = 'io.grpc:protoc-gen-grpc-java:1.48.1'
-    }
-  }
-  generateProtoTasks {
-    all().each { task ->
-      task.builtins {
-        java { option 'lite' }
-      }
-      task.plugins {
-        grpc { option 'lite' }
-      }
-    }
-  }
-}
-sourceSets.main.java.srcDir new File(buildDir, 'generated/source')
+def grpcVersion = '1.65.0-SNAPSHOT' // CURRENT_GRPC_VERSION
+def protobufVersion = '3.25.1'
+def protocVersion = protobufVersion
 
 dependencies {
-	runtimeOnly 'io.grpc:grpc-netty-shaded:1.48.1'
-	implementation 'io.grpc:grpc-protobuf:1.48.1'
-	implementation 'io.grpc:grpc-stub:1.48.1'
-	compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+    
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
 
+    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
+    testImplementation "io.grpc:grpc-inprocess:${grpcVersion}"
+    
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
@@ -54,6 +43,25 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:31.1-jre'
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
 }
 
 

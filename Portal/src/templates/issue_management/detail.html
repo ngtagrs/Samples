@@ -6,42 +6,66 @@
 <div class="container">
     <div class="card">
         <div class="card-header">
-            <span>{{ issue.title }}</span>
+            <div class="issue_show_mode">
+                <span>{{ issue.title }}</span>
+            </div>
+            <div class="issue_edit_mode">
+                <div class="d-flex">
+                    <input type="text" value="{{ issue.title }}">
+                    <button id="issue_delte_btn" type="button" class="btn btn-danger btn-sm vertical-align" style="margin-left: auto;">削除</button>
+                </div>
+            </div>
         </div>
         <div class="card-body">
-            <textarea style="width: 100%; max-height: 200px;">{{ issue.description }}</textarea>
+            <div class="issue_show_mode">
+                {{ issue.description }}
+            </div>
+            <div class="issue_edit_mode">
+                <textarea style="width: 100%; max-height: 200px;">{{ issue.description }}</textarea>
+            </div>
         </div>
         <div class="card-footer text-right">
-            <button type="submit" class="btn btn-primary btn-sm">更新</button>
-            <button type="submit" class="btn btn-danger btn-sm" onclick="location.href='{% url 'delete_issue' issue_id=issue.pk %}'">削除</button>
+            <div class="issue_show_mode">
+                <button id="edit_btn" type="submit" class="btn btn-primary btn-sm">編集</button>
+            </div>
+            <div class="issue_edit_mode">
+                <button id="update_btn" type="submit" class="btn btn-success btn-sm">更新</button>
+                <button id="cancel_btn" type="submit" class="btn btn-navbar btn-sm">キャンセル</button>
+            </div>
         </div>
     </div>
 
     <div class="timeline">
-        <!-- Timeline time label -->
-        <!-- <div class="time-label">
-            <span class="bg-green">23 Aug. 2019</span>
-        </div> -->
         {% for comment in issue.comments.all %}
         <div>
-            <!-- Before each timeline item corresponds to one icon on the left scale -->
-            <!-- <i class="fas fa-envelope bg-blue"></i> -->
             <!-- Timeline item -->
             <div class="timeline-item">
                 <!-- Time -->
                 <span class="time"><i class="fas fa-clock"></i> {{ comment.posted_at }}</span>
                 <!-- Header. Optional -->
-                <h3 class="timeline-header">{{ comment.posted_by }}</h3>
+                <div class="timeline-header">
+                    <div class="d-flex" style="align-items: center;">
+                        <span>{{ comment.posted_by }}</span>
+                        <div class="comment_edit_mode_{{ comment.id }} ml-3">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="location.href='{% url 'delete_issue_comment' issue_comment_id=comment.pk %}'">削除</button>
+                        </div>
+                    </div>
+                </div>
                 <!-- Body -->
                 <div class="timeline-body">
                     {{ comment.comment }}
                 </div>
                 <!-- Placement of additional controls. Optional -->
                 <div class="timeline-footer">
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="location.href='{% url 'delete_issue_comment' issue_comment_id=comment.pk %}'">削除</button>
+                    {% if comment.posted_by.id == user.id %}
+                    <div class="comment_show_mode_{{ comment.id }} text-right">
+                        <button id="comment_edit_btn_{{ comment.id }}" type="submit" class="btn btn-primary btn-sm">編集</button>
                     </div>
+                    <div class="comment_edit_mode_{{ comment.id }} text-right">
+                        <button id="comment_update_btn_{{ comment.id }}" type="submit" class="btn btn-success btn-sm">更新</button>
+                        <button id="comment_cancel_btn_{{ comment.id }}" type="submit" class="btn btn-navbar btn-sm">キャンセル</button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -63,4 +87,44 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(function(){
+        $('.issue_edit_mode').hide();
+        {% for comment in issue.comments.all %}
+            $('.comment_edit_mode_{{ comment.id }}').hide();
+        {% endfor %}
+    });
+
+    $('#edit_btn').click(function(){
+        $('.issue_show_mode').hide();
+        $('.issue_edit_mode').show();
+    });
+    $('#cancel_btn').click(function(){
+        $('.issue_show_mode').show();
+        $('.issue_edit_mode').hide();
+    });
+    $('#update_btn').click(function(){
+
+        $('.issue_show_mode').hide();
+        $('.issue_edit_mode').show();
+    });
+    $('#issue_delte_btn').click(function(){
+        var result = window.confirm("削除してもよろしいですか？");
+        if(result) window.location.href = "{% url 'delete_issue' issue_id=issue.pk %}"
+    })
+
+    {% for comment in issue.comments.all %}
+        $(document).on('click', '#comment_edit_btn_{{ comment.id }}', function(){
+            $('.comment_show_mode_{{ comment.id }}').hide();
+            $('.comment_edit_mode_{{ comment.id }}').show();
+        });
+        $(document).on('click', '#comment_cancel_btn_{{ comment.id }}', function(){
+            $('.comment_show_mode_{{ comment.id }}').show();
+            $('.comment_edit_mode_{{ comment.id }}').hide();
+        });
+    {% endfor %}
+</script>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from apps.home.models import Action
 from apps.issue_management.models import(
     Issue,
     IssueComment
@@ -58,3 +59,10 @@ def post_comment(request, issue_id, comment):
         issue_comment = IssueComment()
         issue_comment.comment = comment
         issue_comment.issue = Issue.objects.get(id=issue_id)
+
+def add_issue_action(issue, type):
+    action = Action()
+    action.page = "Issue"
+    action.type = type
+    action.description = f""
+    action.save()
