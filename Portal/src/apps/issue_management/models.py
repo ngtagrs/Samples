@@ -34,6 +34,7 @@ class Issue(models.Model):
                             verbose_name="担当者",
                             on_delete=models.DO_NOTHING,
                             related_name="in_charge_issue")
+    files = models.file
     registered_at = models.DateTimeField("登録日", auto_now_add=True)
     updated_at = models.DateTimeField("更新日", auto_now=True)
     registered_by = CurrentUserField(settings.AUTH_USER_MODEL,
