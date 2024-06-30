@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block additional_header %}
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-row w-100" style="height: calc(100% - 50px)">
+    <nav id="sidebar-nav" class="bg-dark" style="width: 160px;">
+        <div style="margin: 10px;">
+            <form action="{% url 'chat_bot:chat_bot' %}" method="post" name="f_newchat">
+                {% csrf_token %}
+                <button type="submit" name="action" id="newchat-button" class="btn" style="background-color: gray; color: #fff; width: 100%;">New Chat</button>
+            </form>
+        </div>
+        <ul id="sidebar-list" class="navbar-nav flex-column m-0 p-3">
+            {% for thread in threads %}
+            <li id="{{ thread.id }}" class="nav-item mx-3 text-muted side-nav-bar">
+                <div class="d-flex">
+                    <a class="nav-link active" href="{% url 'chat_bot:chat_thread' thread_id=thread.id %}">{{ thread.title }}</a>
+                    <button type="button" onclick="location.href=" style="background-color: transparent; color: #fff; border-width: 0; margin-left: 60px;">✕</button>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <main class="d-flex flex-column w-100 h-100">
+        <div id="chat-messages">
+            {% for chat in chats %}
+            <div class="chat-element">
+                <div class="chat-user-part">
+                    <img src="media/icon/{{ chat.name }}.png" width="30" height="30">
+                    <div class="user-name">{{ chat.name }}</div>
+                </div>
+                <div class="chat-message" style="white-space: pre-line;">{{ chat.message }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <div id="message-form" class="input-group">
+            <input id="user-message" type="text" class="form-control" placeholder="ここに入力してください" aria-label="ここに入力してください" aria-describedby="button-addon2">
+            <button id="message-send-button" class="btn btn-outline-secondary" type="button" id="button-addon2"><img src="media/icon/gpt.png" width="30" height="30"></button>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{% static 'script/js/chat.js' %}"></script>
+<script>
+    let thread_id = JSON.parse('{{ js_data|safe }}').thread_id;
+
+    const sidebarList = document.getElementById("sidebar-list");
+    const userMessage = document.getElementById("user-message");
+    const chatMessages = document.getElementById("chat-messages");
+    document.getElementById("message-send-button").addEventListener("click", async (event) => {
+        event.preventDefault();
+        if (userMessage.value == "") return;
+        chatMessages.appendChild(createChatElement(userMessage.value, 'user'));
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        const response = await sendMessage(userMessage.value, thread_id);
+        
+        if (thread_id!=response.thread_id) 
+        {
+            sidebarList.appendChild(createChatThreadElement("New"));
+            thread_id = response.thread_id;
+        }
+
+        chatMessages.appendChild(createChatElement(response.message, 'gpt'));
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        userMessage.value = '';
+    });
+</script>
+{% endblock %}
