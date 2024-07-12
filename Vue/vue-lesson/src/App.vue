@@ -1,13 +1,14 @@
 <script setup>
-import { ref } from 'vue'
-
-const count=ref(0)
-function countUp(){
-    count.value++
-}
+import { ref, computed } from 'vue'
+const score = ref(0)
+const evaluation = computed(() => {
+    return score.value > 3 ? 'Good' : 'Bad'
+})
 </script>
 
 <template>
-    <p>{{ count }}</p>
-    <button @click="countUp">button</button>
+    <p>{{ score > 3 ? 'Good' : 'Bad' }}</p>
+    <p>{{ evaluation }}</p>
+    <p>{{ score }}</p>
+    <button @click="score++">+1</button>
 </template>

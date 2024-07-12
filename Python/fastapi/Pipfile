@@ -9,6 +9,12 @@ uvicorn = {extras = ["standard"], version = "*"}
 sqlalchemy = "*"
 alembic = "*"
 psycopg2-binary = "*"
+python-multipart = "*"
+python-jose = {extras = ["cryptgraphy"], version = "*"}
+pytest = "*"
+httpx = "*"
+python-dotenv = "*"
+pydantic-settings = "*"
 
 [dev-packages]
 
