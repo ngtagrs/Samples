@@ -34,8 +34,6 @@ class File {
 
 const issue = new Issue();
 issue.id = 1;
-issue.title = "SIMM年次バックテスト"
-issue.description = "今のPositionを3年間保持したときのVaRがSIMMの値を超えないかを確認"
 
 </script>
 
