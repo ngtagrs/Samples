@@ -2,7 +2,7 @@
 import draggable from "vuedraggable";
 import Issue from "../assets/ts/Issue"
 import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 const router = useRouter();
 
@@ -11,12 +11,45 @@ type Props = {
 };
 const props = defineProps<Props>();
 
-const unmanaged_issues = computed(() => props.issues.filter(issue => issue.status=="未着手"))
-const progressing_issues = computed(() => props.issues.filter(issue => issue.status=="進行中"))
-const completed_issues = computed(() => props.issues.filter(issue => issue.status=="完了"))
-const pending_issues = computed(() => props.issues.filter(issue => issue.status=="ペンディング"))
+const isShowDialogs = ref({});
+props.issues.forEach((issue: Issue) => { isShowDialogs.value[issue.id] = false})
 
-const dialog = ref(false);
+let unmanaged_issues = ref(props.issues.filter(issue => issue.status=="未着手"))
+let progressing_issues = ref(props.issues.filter(issue => issue.status=="進行中"))
+let completed_issues = ref(props.issues.filter(issue => issue.status=="完了"))
+let pending_issues = ref(props.issues.filter(issue => issue.status=="ペンディング"))
+watch(props.issues, () =>{
+    unmanaged_issues.value = props.issues.filter(issue => issue.status=="未着手")
+    progressing_issues.value = props.issues.filter(issue => issue.status=="進行中")
+    completed_issues.value = props.issues.filter(issue => issue.status=="完了")
+    pending_issues.value = props.issues.filter(issue => issue.status=="ペンディング")
+})
+
+watch(unmanaged_issues, (newIssues, oldIssues) => {
+    if (newIssues.length > oldIssues.length){
+        const addedIssue: Issue = newIssues.filter(issue => !oldIssues.includes(issue))[0];
+        addedIssue.status = "未着手";
+    }
+})
+watch(progressing_issues, (newIssues, oldIssues) => {
+    if (newIssues.length > oldIssues.length){
+        const addedIssue: Issue = newIssues.filter(issue => !oldIssues.includes(issue))[0];
+        addedIssue.status = "進行中";
+    }
+})
+watch(completed_issues, (newIssues, oldIssues) => {
+    if (newIssues.length > oldIssues.length){
+        const addedIssue: Issue = newIssues.filter(issue => !oldIssues.includes(issue))[0];
+        addedIssue.status = "完了";
+    }
+})
+watch(pending_issues, (newIssues, oldIssues) => {
+    if (newIssues.length > oldIssues.length){
+        const addedIssue: Issue = newIssues.filter(issue => !oldIssues.includes(issue))[0];
+        addedIssue.status = "ペンディング";
+    }
+})
+
 
 const detailIssue = (issue: Issue) => {
   router.push({ name: "issue_detail", params: { id: issue.id }});
@@ -59,7 +92,6 @@ const deleteItem = (issue: Issue) => {
                                         title="Delete">
                                         <template v-slot:actions>
                                             <v-spacer></v-spacer>
-
                                             <v-btn @click="deleteItem(element)"> OK </v-btn>
                                             <v-btn @click="dialog = false"> Cancel </v-btn>
                                         </template>
@@ -73,7 +105,7 @@ const deleteItem = (issue: Issue) => {
         </v-col>
 
         <v-col>
-            <v-card>
+            <v-card class="outer-card">
                 <v-card-title>進行中</v-card-title>
                 <v-divider></v-divider>
                 <draggable v-model="progressing_issues" item-key="id" tag="ul" group="ISSUES">
@@ -109,7 +141,7 @@ const deleteItem = (issue: Issue) => {
             </v-card>
         </v-col>
         <v-col>
-            <v-card>
+            <v-card class="outer-card">
                 <v-card-title>完了</v-card-title>
                 <v-divider></v-divider>
                 <draggable v-model="completed_issues" item-key="id" tag="ul" group="ISSUES">
@@ -145,7 +177,7 @@ const deleteItem = (issue: Issue) => {
             </v-card>
         </v-col>
         <v-col>
-            <v-card>
+            <v-card class="outer-card">
                 <v-card-title>ペンディング</v-card-title>
                 <v-divider></v-divider>
                 <draggable v-model="pending_issues" item-key="id" tag="ul" group="ISSUES">
@@ -192,7 +224,7 @@ li.title {
     cursor: pointer;
 }
 .outer-card {
-    margin: 20px;
+    margin-top: 20px;
 }
 .inner-card {
     margin: 30px; 
