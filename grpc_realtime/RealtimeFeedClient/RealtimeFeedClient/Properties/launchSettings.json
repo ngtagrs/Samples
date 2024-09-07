@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RealtimeFeedClient": {
+      "commandName": "Project",
+      "commandLineArgs": "1"
+    }
+  }
+}

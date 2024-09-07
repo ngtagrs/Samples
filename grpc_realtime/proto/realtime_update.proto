@@ -1,0 +1,42 @@
+syntax="proto3";
+
+option go_package = "./pb";
+option csharp_namespace = "RealtimeMarketService";
+
+message RealtimeMarketRequest{
+    string ip = 1;
+    int32 update_interval = 2;
+    repeated string target_ticker_list = 3;
+    repeated TargetData target_data_list = 4;
+}
+
+message RealtimeMarketResponse{
+    repeated EquityData equity_data_list = 1;
+}
+
+message EquityData{
+    string ticker = 1;
+    SpotData spot_data = 2;
+    map<string, double> sigma_data = 3;
+    map<string, double> alpha_data = 4;
+    map<string, double> alphaR_data = 5;
+    map<string, double> beta_data = 6;
+    map<string, double> rho_data = 7;
+}
+
+message SpotData{
+    double open = 1;
+    double low = 2;
+    double high=3;
+    double spot=4;
+}
+
+enum TargetData{
+    TARGETDATA_UNKNOWN = 0;
+    SPOT = 1;
+    VOL = 2;
+}
+
+service RealtimeDataService{
+    rpc StartRealtimeMarketFeed(RealtimeMarketRequest) returns(stream RealtimeMarketResponse);
+}
